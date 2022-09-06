@@ -16,7 +16,7 @@ namespace Zork
             }
             else if (inputString == "LOOK")
             {
-                Console.WriteLine("This is an open field west of a white house, with a boarded frot door. \nA rubber mat saying 'Welcome to Zork!' lies by the door.");
+                Console.WriteLine("This is an open field west of a white house, with a boarded front door. \nA rubber mat saying 'Welcome to Zork!' lies by the door.");
             }
             else
             {
