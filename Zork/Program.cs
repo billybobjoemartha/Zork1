@@ -12,7 +12,7 @@ namespace Zork
 
             while (command != Commands.QUIT)
             {
-                Console.Write($"{_rooms[_currentRoom]}\n> ");
+                Console.Write($"{_rooms[_currentRow, _currentColumn]}\n> ");
                 command = ToCommand(Console.ReadLine().Trim());
                 string outputString;
 
@@ -55,17 +55,23 @@ namespace Zork
 
             switch(command)
             {
-                case Commands.NORTH:
-                case Commands.SOUTH:
+                case Commands.NORTH when _currentRow < _rooms.GetLength(0) - 1:
+                    _currentRow++;
+                    didMove = true;
                     break;
 
-                case Commands.EAST when _currentRoom < _rooms.Length - 1:
-                        _currentRoom++;
+                case Commands.SOUTH when _currentRow > 0:
+                    _currentRow--;
+                    didMove = true;
+                    break;
+
+                case Commands.EAST when _currentColumn < _rooms.GetLength(1) - 1:
+                        _currentColumn++;
                         didMove = true;
                         break;
 
-                case Commands.WEST when _currentRoom > 0:
-                        _currentRoom--;
+                case Commands.WEST when _currentColumn > 0:
+                        _currentColumn--;
                         didMove = true;
                     break;
 
@@ -73,7 +79,14 @@ namespace Zork
 
             return didMove;
         }
-        private static readonly string[] _rooms = {"Forest", "West of House", "Behind House", "Clearing", "Canyon View" };
-        private static int _currentRoom = 1;
+        private static readonly string[,] _rooms =
+        {
+                {"Rocky Trail", "South of House", "Canyon View" },
+                {"Forest", "West of House", "Behind House" },
+                {"Dense Woods", "North of House", "Clearing"}
+        };
+        
+        private static int _currentRow = 1;
+        private static int _currentColumn = 1;
     }
 }
