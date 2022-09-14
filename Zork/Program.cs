@@ -23,14 +23,14 @@ namespace Zork
                         break;
 
                     case Commands.LOOK:
-                        outputString = "This is an open field west of a white house, with a boarded front door. \nA Rubber mat saying 'Welcome to Zork!' lies by the door.";
+                        outputString = "A Rubber mat saying 'Welcome to Zork!' lies by the door.";
                         break;
 
                     case Commands.NORTH:
                     case Commands.SOUTH:
                     case Commands.EAST:
                     case Commands.WEST:
-                        if(Move(command))
+                        if (Move(command))
                         {
                             outputString = $"You moved {command}.";
                         }
@@ -53,7 +53,7 @@ namespace Zork
         {
             bool didMove = false;
 
-            switch(command)
+            switch (command)
             {
                 case Commands.NORTH when _currentRow < _rooms.GetLength(0) - 1:
                     _currentRow++;
@@ -66,13 +66,13 @@ namespace Zork
                     break;
 
                 case Commands.EAST when _currentColumn < _rooms.GetLength(1) - 1:
-                        _currentColumn++;
-                        didMove = true;
-                        break;
+                    _currentColumn++;
+                    didMove = true;
+                    break;
 
                 case Commands.WEST when _currentColumn > 0:
-                        _currentColumn--;
-                        didMove = true;
+                    _currentColumn--;
+                    didMove = true;
                     break;
 
             }
@@ -85,7 +85,7 @@ namespace Zork
                 {"Forest", "West of House", "Behind House" },
                 {"Dense Woods", "North of House", "Clearing"}
         };
-        
+
         private static int _currentRow = 1;
         private static int _currentColumn = 1;
     }
