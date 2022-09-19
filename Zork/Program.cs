@@ -1,18 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Zork
 {
     class Program
     {
+        private static Room CurrentRoom
+        {
+            get
+            {
+                return _rooms[_location._currentRow, _location._currentColumn];
+            }
+        }
+
         static void Main(string[] args)
         {
+            InitializeRoomDescriptions();
             Console.WriteLine("Welcome to Zork!");
+
+            Room previousRoom = null;
 
             Commands command = Commands.UNKNOWN;
 
             while (command != Commands.QUIT)
             {
-                Console.Write($"{_rooms[_currentRow, _currentColumn]}\n> ");
+                Console.Write(CurrentRoom);
+
+                if (previousRoom != CurrentRoom)
+                {
+                    Console.WriteLine(CurrentRoom.Description);
+                    previousRoom = CurrentRoom;
+                }
+
+                Console.Write("> ");
+
                 command = ToCommand(Console.ReadLine().Trim());
                 string outputString;
 
@@ -79,14 +100,35 @@ namespace Zork
 
             return didMove;
         }
-        private static readonly string[,] _rooms =
+
+        private static void InitializeRoomDescriptions()
         {
-                {"Rocky Trail", "South of House", "Canyon View" },
-                {"Forest", "West of House", "Behind House" },
-                {"Dense Woods", "North of House", "Clearing"}
+            var roomMap = new Dictionary<string, Room>();
+            foreach (Room room in _rooms)
+            {
+                roomMap.Add(room.Name, room);
+            }
+
+            roomMap["Rocky Trail"].Description = "You are on a rock-strewn trail.";
+            roomMap["South of House"].Description = "You are facing the south side of a white house. There is no door here, and all the windows are barred.";
+            roomMap["Canyon View"].Description = "";
+
+            roomMap["Forest"].Description = "";
+            roomMap["West of House"].Description = "";
+            roomMap["Behind House"].Description = "";
+
+            roomMap["Dense Woods"].Description = "";
+            roomMap["North of House"].Description = "";
+            roomMap["Clearing"].Description = "";
+        }
+
+        private static readonly Room[,] _rooms =
+        {
+            { new Room("Rocky Trail"), new Room("South of House"), new Room("Canyon View") },
+            { new Room("Forest"), new Room("West of House"), new Room("Behind House") },
+            { new Room("Dense Woods"), new Room("North of House"), new Room("Clearing")}
         };
 
-        private static int _currentRow = 1;
-        private static int _currentColumn = 1;
+        private static (int _currentRow, int _currentColumn) _location = (1, 1);
     }
 }
