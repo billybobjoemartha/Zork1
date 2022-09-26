@@ -25,9 +25,9 @@ namespace Zork
                 Console.Write(CurrentRoom);
 
                 Console.Write("\n> ");
+                string outputString = null;
 
                 command = ToCommand(Console.ReadLine().Trim());
-                string outputString = "";
 
                 switch (command)
                 {
@@ -56,6 +56,10 @@ namespace Zork
                     default:
                         outputString = "Unknown command.";
                         break;
+                }
+                if (outputString != null)
+                {
+                    Console.WriteLine(outputString);
                 }
             }
         }
@@ -98,7 +102,7 @@ namespace Zork
             _rooms[0, 1].Description = "You are at the top of the Great Canyon on its south wall.";
 
             _rooms[1, 0].Description = "This is a forest, with trees in all directions around you.";
-            _rooms[1, 1].Description = "This is an open field west of a white house, with a boarded front door";
+            _rooms[1, 1].Description = "This is an open field west of a white house, with a boarded front door.";
             _rooms[1, 2].Description = "You are behind the white house. In one corner of the house there is a small window which is slightly ajar.";
 
             _rooms[2, 0].Description = "This is a dimly lit forest, with large trees all around. To the east, there appears to be sunlight.";
