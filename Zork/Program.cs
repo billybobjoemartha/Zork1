@@ -20,9 +20,9 @@ namespace Zork
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Zork!");
-            const string defaultRoomsFilename = "Rooms.json";
+            const string defaultRoomsFilename = "Rooms.txt";
             string roomsFilename = (args.Length > 0 ? args[(int)CommandLineArguments.RoomsFilename] : defaultRoomsFilename);
-            InitializeRooms(defaultRoomsFilename);
+            InitializeRoomDescriptions(defaultRoomsFilename);
             Room previousRoom = null;
             Commands command = Commands.UNKNOWN;
 
@@ -73,6 +73,8 @@ namespace Zork
                 }
             }
         }
+
+        private static readonly Dictionary<string, Room> RoomMap;
         private static Commands ToCommand(string commandString) => (Enum.TryParse<Commands>(commandString, true, out Commands result) ? result : Commands.UNKNOWN);
         private static bool Move(Commands command)
         {
@@ -105,6 +107,15 @@ namespace Zork
             return didMove;
         }
 
+        static Program()
+        {
+            RoomMap = new Dictionary<string, Room>();
+            foreach (Room room in Rooms)
+            {
+                RoomMap[room.Name] = room;
+            }
+        }
+
         private enum CommandLineArguments
         {
             RoomsFilename = 0
@@ -115,10 +126,34 @@ namespace Zork
             Name = 0,
             Description
         }
-        private static void InitializeRooms(string roomsFilename) =>
-            Rooms = JsonConvert.DeserializeObject<Room[,]>(File.ReadAllText(roomsFilename));
+        private static void InitializeRoomDescriptions(string roomsFilename)
+        {
+            const string fieldDelimiter = "##";
+            const int expectedFieldCount = 2;
 
-        private static Room[,] Rooms;
+            string[] lines = File.ReadAllLines(roomsFilename);
+            foreach (string line in lines)
+            {
+                string[] fields = line.Split(fieldDelimiter);
+                if (fields.Length != expectedFieldCount)
+                {
+                    throw new InvalidDataException("Invalid record.");
+                }
+
+                string name = fields[(int)Fields.Name];
+                string description = fields[(int)Fields.Description];
+
+                RoomMap[name].Description = description;
+            }
+        }
+            
+
+        private static readonly Room[,] Rooms =
+        {
+            { new Room("Rocky Trail"), new Room("South of House"), new Room("Canyon View") },
+            { new Room("Forest"), new Room("West of House"), new Room("Behind House") },
+            { new Room("Dense Woods"), new Room("North of House"), new Room("Clearing")}
+        };
 
         private static (int Row, int Column) _location = (1, 1);
     }
