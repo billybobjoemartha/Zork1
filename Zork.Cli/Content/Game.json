@@ -3,16 +3,19 @@
   "World": {
     "Items": [
       {
-        "Name": "mat",
-        "Description": "A rubber mat with the words 'Welcome to Zork!' written on it lies here."
+        "Name": "Mat",
+        "LookDescription": "A rubber mat saying 'Welcome to Zork!' lies here.",
+        "InventoryDescription": "A welcome mat."
       },
       {
-        "Name": "mailbox",
-        "Description": "There is a small mailbox here."
+        "Name": "Mailbox",
+        "LookDescription": "There is a small mailbox here.",
+        "InventoryDescription": "A small mailbox."
       },
       {
-        "Name": "leaves",
-        "Description": "There is a pile of leaves here."
+        "Name": "Leaves",
+        "LookDescription": "There is a pile of leaves here.",
+        "InventoryDescription": "A pile of leaves."
       }
     ],
     "Rooms": [
