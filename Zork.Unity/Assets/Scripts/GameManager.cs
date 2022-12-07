@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI MovesText;
 
     [SerializeField]
+    private TextMeshProUGUI LivesText;
+
+    [SerializeField]
     private UnityInputService InputService;
 
     [SerializeField]
@@ -44,6 +47,12 @@ public class GameManager : MonoBehaviour
         MovesText.text = $"Moves: {_game.moves}";
     }
 
+    private void Player_LivesChanged()
+    {
+        LivesText.text = $"Lives: {_game.playerHealth}/25";
+    }
+
+
     private void Start()
     {
         InputService.SetFocus();
@@ -58,6 +67,7 @@ public class GameManager : MonoBehaviour
             InputService.SetFocus();
             Player_ScoreChanged();
             Player_MovesChanged();
+            Player_LivesChanged();
         }
     }
 

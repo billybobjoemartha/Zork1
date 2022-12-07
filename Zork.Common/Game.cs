@@ -22,6 +22,8 @@ namespace Zork.Common
         public bool IsRunning { get; private set; }
         public int moves { get; private set; }
         public int rewardScore { get; private set; }
+        public int playerHealth { get; private set; }
+        public bool enemyAttackKey { get; private set; }
 
         public Game(World world, string startingLocation)
         {
@@ -39,6 +41,8 @@ namespace Zork.Common
             Output.WriteLine("Welcome to Zork!");
             Look();
             Output.WriteLine($"{Player.CurrentRoom}");
+            playerHealth = 25;
+            enemyAttackKey = false;
         }
 
         public void OnInputReceived(object sender, string inputString)
@@ -48,6 +52,8 @@ namespace Zork.Common
 
             string verb;
             string subject = null;
+            string withWord = null;
+            string wSubject = null;
             if (commandTokens.Length == 0)
             {
                 return;
@@ -56,10 +62,23 @@ namespace Zork.Common
             {
                 verb = commandTokens[0];
             }
+            else if (commandTokens.Length == 2)
+            {
+                verb = commandTokens[0];
+                subject = commandTokens[1];
+            }
+            else if (commandTokens.Length == 3)
+            {
+                verb = commandTokens[0];
+                subject = commandTokens[1];
+                withWord = commandTokens[2];
+            }
             else
             {
                 verb = commandTokens[0];
                 subject = commandTokens[1];
+                withWord = commandTokens[2];
+                wSubject = commandTokens[3];
             }
 
             Room previousRoom = Player.CurrentRoom;
@@ -81,6 +100,11 @@ namespace Zork.Common
                     moves++;
                     break;
 
+                case Commands.Health:
+                    Output.WriteLine($"Your current health is {playerHealth}.");
+                    moves++;
+                    break;
+
                 case Commands.Score:
                     moves++;
                     Score();
@@ -91,8 +115,9 @@ namespace Zork.Common
                 case Commands.East:
                 case Commands.West:
                     Directions direction = (Directions)command;
-                    Output.WriteLine(Player.Move(direction) ? $"You moved {direction}." : "The way is shut!");
+                    Output.WriteLine(Player.Move(direction) ? $"You moved {direction}." :  "The way is shut!");
                     moves++;
+                    enemyAttackKey = false;
                     break;
 
                 case Commands.Take:
@@ -115,6 +140,26 @@ namespace Zork.Common
                     else
                     {
                         Drop(subject);
+                    }
+                    moves++;
+                    break;
+
+                case Commands.Attack:
+                    if (string.IsNullOrEmpty(subject))
+                    {
+                        Output.WriteLine("This command requires an enemy to target.");
+                    }
+                    else if (string.IsNullOrEmpty(withWord))
+                    {
+                        Output.WriteLine("This command requires the word with.");
+                    }
+                    else if (string.IsNullOrEmpty(wSubject))
+                    {
+                        Output.WriteLine("This command requires a weapon after the word with.");
+                    }
+                    else
+                    {
+                        Attack(subject, withWord, wSubject);
                     }
                     moves++;
                     break;
@@ -146,6 +191,27 @@ namespace Zork.Common
             }
 
             Output.WriteLine($"{Player.CurrentRoom}");
+            if (enemyAttackKey == true)
+            {
+                foreach (Enemy enemy in Player.CurrentRoom.AliveInventory)
+                {
+                    Output.WriteLine($"{enemy.Name} attacks you and does {enemy.EnemyDamage} damage!");
+                    playerHealth -= enemy.EnemyDamage;
+                    if(playerHealth <= 0)
+                    {
+                        playerHealth = 0;
+                        Output.WriteLine("You died.");
+                        Output.WriteLine("Thank you for playing!");
+                        IsRunning = false;
+                        Environment.Exit(0);
+                    }
+                    else
+                    {
+                        Output.WriteLine($"Your current health is {playerHealth}.");
+                    }
+                }
+            }
+            enemyAttackKey = true;
         }
 
         private void Score()
@@ -163,6 +229,10 @@ namespace Zork.Common
             foreach (Item item in Player.CurrentRoom.Inventory)
             {
                 Output.WriteLine(item.LookDescription);
+            }
+            foreach (Enemy enemy in Player.CurrentRoom.AliveInventory)
+            {
+                Output.WriteLine(enemy.LookDescription);
             }
         }
 
@@ -193,6 +263,44 @@ namespace Zork.Common
                 Player.CurrentRoom.AddItemToInventory(itemToDrop);
                 Player.RemoveItemFromInventory(itemToDrop);
                 Output.WriteLine("Dropped.");
+            }
+        }
+
+        private void Attack(string enemyName, string withCheck, string weaponName)
+        {
+            Enemy enemyToAttack = Player.CurrentRoom.AliveInventory.FirstOrDefault(enemy => string.Compare(enemy.Name, enemyName, ignoreCase: true) == 0);
+            Item weaponToUse = Player.Inventory.FirstOrDefault(item => string.Compare(item.Name, weaponName, ignoreCase: true) == 0);
+            if (enemyToAttack == null)
+            {
+                Output.WriteLine("You can't see any such thing.");
+            }
+            else
+            {
+                if(withCheck != "with")
+                {
+                    Output.WriteLine("This command requires the word with after the enemy name.");
+                }
+                else
+                {
+                    if(weaponToUse == null || weaponToUse.IsWeapon == false)
+                    {
+                        Output.WriteLine("You can't attack with that.");
+                    }
+                    else
+                    {
+                        enemyToAttack.EnemyHealth -= weaponToUse.WeaponDamage;
+                        Output.WriteLine($"You attacked the {enemyName} with the {weaponName} and did {weaponToUse.WeaponDamage} damage!");
+                        if(enemyToAttack.EnemyHealth >= 1)
+                        {
+                            Output.WriteLine($"The {enemyName} now has {enemyToAttack.EnemyHealth} health!");
+                        }
+                        else
+                        {
+                            Output.WriteLine($"You have slain the {enemyName}!");
+                            Player.CurrentRoom.RemoveEnemyFromInventory(enemyToAttack);
+                        }
+                    }
+                }
             }
         }
 

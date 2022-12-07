@@ -5,17 +5,64 @@
       {
         "Name": "Mat",
         "LookDescription": "A rubber mat saying 'Welcome to Zork!' lies here.",
-        "InventoryDescription": "A welcome mat."
+        "InventoryDescription": "A welcome mat.",
+        "IsWeapon": false,
+        "WeaponDamage": 0
       },
       {
         "Name": "Mailbox",
         "LookDescription": "There is a small mailbox here.",
-        "InventoryDescription": "A small mailbox."
+        "InventoryDescription": "A small mailbox.",
+        "IsWeapon": false,
+        "WeaponDamage": 0
       },
       {
         "Name": "Leaves",
         "LookDescription": "There is a pile of leaves here.",
-        "InventoryDescription": "A pile of leaves."
+        "InventoryDescription": "A pile of leaves.",
+        "IsWeapon": false,
+        "WeaponDamage": 0
+      },
+      {
+        "Name": "Dagger",
+        "LookDescription": "There is an iron dagger here.",
+        "InventoryDescription": "An iron dagger.",
+        "IsWeapon": true,
+        "WeaponDamage": 2
+      },
+      {
+        "Name": "Axe",
+        "LookDescription": "There is a golden axe here.",
+        "InventoryDescription": "A golden axe.",
+        "IsWeapon": true,
+        "WeaponDamage": 5
+      },
+      {
+        "Name": "Sword",
+        "LookDescription": "There is a silver sword here.",
+        "InventoryDescription": "A silver sword.",
+        "IsWeapon": true,
+        "WeaponDamage": 10
+      }
+    ],
+    "Enemies": [
+      {
+        "Name": "Troll",
+        "LookDescription": "A large troll angrily stares at you.",
+        "EnemyHealth": 5,
+        "EnemyDamage": 3
+      },
+      {
+        "Name": "Giant",
+        "LookDescription": "A massive giant stands in your way.",
+        "EnemyHealth": 10,
+        "EnemyDamage": 5
+      },
+      {
+        "Name": "Goblin",
+        "LookDescription": "A sneaky goblin stalks you in the shadows.",
+        "EnemyHealth": 2,
+        "EnemyDamage": 1
       }
     ],
     "Rooms": [
@@ -29,7 +76,13 @@
         },
         "InventoryNames": [
           "Mat",
-          "Mailbox"
+          "Mailbox",
+          "Dagger",
+          "Sword",
+          "Axe"
+        ],
+        "EnemyNames": [
+          "Troll"
         ]
       },
       {
@@ -39,7 +92,10 @@
           "North": "Forest 2",
           "East": "Behind House",
           "West": "West of House"
-        }
+        },
+        "EnemyNames": [
+          "Giant"
+        ]
       },
       {
         "Name": "South of House",
@@ -47,7 +103,10 @@
         "NeighborNames": {
           "East": "Behind House",
           "West": "West of House"
-        }
+        },
+        "EnemyNames": [
+          "Goblin"
+        ]
       },
       {
         "Name": "Behind House",
@@ -90,7 +149,7 @@
           "West": "Forest 2",
           "South": "Forest 3"
         },
-        "IventoryNames": [
+        "InventoryNames": [
           "Leaves"
         ]
       }

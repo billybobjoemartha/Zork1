@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Zork.Common
 {
@@ -20,10 +19,15 @@ namespace Zork.Common
         [JsonIgnore]
         public IEnumerable<Item> Inventory => _inventory;
 
+        [JsonIgnore]
+        public IEnumerable<Enemy> AliveInventory => _aliveInventory;
+
         [JsonProperty]
         private string[] InventoryNames { get; set; }
 
-        public Room(string name, string description, Dictionary<Directions, string> neighborNames, string[] inventoryNames)
+        private string[] EnemyNames { get; set; }
+
+        public Room(string name, string description, Dictionary<Directions, string> neighborNames, string[] inventoryNames, string[] enemyNames)
         {
             Name = name;
             Description = description;
@@ -32,6 +36,9 @@ namespace Zork.Common
 
             InventoryNames = inventoryNames ?? new string[0];
             _inventory = new List<Item>();
+
+            EnemyNames = enemyNames ?? new string[0];
+            _aliveInventory = new List<Enemy>();
         }
 
         public static bool operator ==(Room lhs, Room rhs)
@@ -75,6 +82,16 @@ namespace Zork.Common
             InventoryNames = null;
         }
 
+        public void UpdateAliveInventory(World world)
+        {
+            foreach (var enemyName in EnemyNames)
+            {
+                _aliveInventory.Add(world.EnemiesByName[enemyName]);
+            }
+
+            EnemyNames = null;
+        }
+
         public void AddItemToInventory(Item itemToAdd)
         {
             if (_inventory.Contains(itemToAdd))
@@ -85,6 +102,16 @@ namespace Zork.Common
             _inventory.Add(itemToAdd);
         }
 
+        public void AddEnemyToInventory(Enemy enemyToAdd)
+        {
+            if (_aliveInventory.Contains(enemyToAdd))
+            {
+                throw new Exception($"Enemy {enemyToAdd} already exists in room.");
+            }
+
+            _aliveInventory.Add(enemyToAdd);
+        }
+
         public void RemoveItemFromInventory(Item itemToRemove)
         {
             if (_inventory.Remove(itemToRemove) == false)
@@ -93,9 +120,18 @@ namespace Zork.Common
             }
         }
 
+        public void RemoveEnemyFromInventory(Enemy enemyToRemove)
+        {
+            if (_aliveInventory.Remove(enemyToRemove) == false)
+            {
+                throw new Exception("Could not remove enemy from room.");
+            }
+        }
+
         public override string ToString() => Name;
 
         private readonly List<Item> _inventory;
+        private readonly List<Enemy> _aliveInventory;
         private readonly Dictionary<Directions, Room> _neighbors;
     }
 }
