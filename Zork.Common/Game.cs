@@ -201,8 +201,8 @@ namespace Zork.Common
                     {
                         playerHealth = 0;
                         Output.WriteLine("You died.");
-                        Output.WriteLine("Thank you for playing!");
                         IsRunning = false;
+                        Output.WriteLine("Thank you for playing!");
 
                     }
                     else
