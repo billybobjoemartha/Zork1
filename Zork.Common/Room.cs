@@ -63,7 +63,7 @@ namespace Zork.Common
         public override int GetHashCode() => Name.GetHashCode();
 
         public void UpdateNeighbors(World world)
-        {            
+        {
             foreach (var neighborName in NeighborNames)
             {
                 _neighbors.Add(neighborName.Key, world.RoomsByName[neighborName.Value]);

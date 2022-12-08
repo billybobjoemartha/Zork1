@@ -37,7 +37,7 @@ namespace Zork.Common
             {
                 _itemsByName.Add(item.Name, item);
             }
-            
+
             Enemies = enemies;
             _enemiesByName = new Dictionary<string, Enemy>(StringComparer.OrdinalIgnoreCase);
             foreach (Enemy enemy in Enemies)

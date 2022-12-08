@@ -69,7 +69,8 @@ public class GameManager : MonoBehaviour
             Player_MovesChanged();
             Player_LivesChanged();
         }
+
     }
 
-    private Game _game;
+    public static Game _game;
 }

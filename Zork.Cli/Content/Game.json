@@ -77,12 +77,7 @@
         "InventoryNames": [
           "Mat",
           "Mailbox",
-          "Dagger",
-          "Sword",
-          "Axe"
-        ],
-        "EnemyNames": [
-          "Troll"
+          "Dagger"
         ]
       },
       {
@@ -94,7 +89,7 @@
           "West": "West of House"
         },
         "EnemyNames": [
-          "Giant"
+          "Goblin"
         ]
       },
       {
@@ -115,7 +110,10 @@
           "North": "North of House",
           "East": "Clearing",
           "South": "South of House"
-        }
+        },
+        "EnemyNames": [
+          "Troll"
+        ]
       },
       {
         "Name": "Forest 1",
@@ -132,7 +130,10 @@
         "NeighborNames": {
           "South": "Clearing",
           "East": "Clearing"
-        }
+        },
+        "InventoryNames": [
+          "Axe"
+        ]
       },
       {
         "Name": "Forest 3",
@@ -150,7 +151,11 @@
           "South": "Forest 3"
         },
         "InventoryNames": [
-          "Leaves"
+          "Leaves",
+          "Sword"
+        ],
+        "EnemyNames": [
+          "Giant"
         ]
       }
     ]

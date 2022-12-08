@@ -115,7 +115,7 @@ namespace Zork.Common
                 case Commands.East:
                 case Commands.West:
                     Directions direction = (Directions)command;
-                    Output.WriteLine(Player.Move(direction) ? $"You moved {direction}." :  "The way is shut!");
+                    Output.WriteLine(Player.Move(direction) ? $"You moved {direction}." : "The way is shut!");
                     moves++;
                     enemyAttackKey = false;
                     break;
@@ -197,13 +197,13 @@ namespace Zork.Common
                 {
                     Output.WriteLine($"{enemy.Name} attacks you and does {enemy.EnemyDamage} damage!");
                     playerHealth -= enemy.EnemyDamage;
-                    if(playerHealth <= 0)
+                    if (playerHealth <= 0)
                     {
                         playerHealth = 0;
                         Output.WriteLine("You died.");
                         Output.WriteLine("Thank you for playing!");
                         IsRunning = false;
-                        Environment.Exit(0);
+
                     }
                     else
                     {
@@ -276,13 +276,13 @@ namespace Zork.Common
             }
             else
             {
-                if(withCheck != "with")
+                if (withCheck != "with")
                 {
                     Output.WriteLine("This command requires the word with after the enemy name.");
                 }
                 else
                 {
-                    if(weaponToUse == null || weaponToUse.IsWeapon == false)
+                    if (weaponToUse == null || weaponToUse.IsWeapon == false)
                     {
                         Output.WriteLine("You can't attack with that.");
                     }
@@ -290,7 +290,7 @@ namespace Zork.Common
                     {
                         enemyToAttack.EnemyHealth -= weaponToUse.WeaponDamage;
                         Output.WriteLine($"You attacked the {enemyName} with the {weaponName} and did {weaponToUse.WeaponDamage} damage!");
-                        if(enemyToAttack.EnemyHealth >= 1)
+                        if (enemyToAttack.EnemyHealth >= 1)
                         {
                             Output.WriteLine($"The {enemyName} now has {enemyToAttack.EnemyHealth} health!");
                         }
